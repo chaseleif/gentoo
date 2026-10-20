@@ -9,6 +9,17 @@ Version 0.11.1 includes all patches applied to 0.10.1 and more.
 
 Mostly copied the 0.10.1-r2 ebuild, modified for `SRC_URI` and `src_prepare`
 
+## x11-misc/fracplanet
+
+Package was removed from Gentoo.
+
+- No upstream updates since 2017
+- QT5 dependency, needed update to QT6
+
+I started from the original source and updated the package to use QT6.
+
+See repo at https://github.com/chaseleif/fracplanet
+
 ---
 # Patches
 
