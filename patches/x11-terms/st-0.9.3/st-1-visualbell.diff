@@ -1,0 +1,130 @@
+diff --git a/x.c b/x.c
+index b86c0c4..4d0265c 100644
+--- a/x.c
++++ b/x.c
+@@ -139,6 +139,8 @@ typedef struct {
+ /* Drawing Context */
+ typedef struct {
+ 	Color *col;
++	Color *normalcol;
++	Color *bellcol;
+ 	size_t collen;
+ 	Font font, bfont, ifont, ibfont;
+ 	GC gc;
+@@ -159,6 +161,8 @@ static void cresize(int, int);
+ static void xresize(int, int);
+ static void xhints(void);
+ static int xloadcolor(int, const char *, Color *);
++static void xnormalcols(void);
++static void xbellcols(void);
+ static int xloadfont(Font *, FcPattern *);
+ static void xloadfonts(const char *, double);
+ static void xunloadfont(Font *);
+@@ -224,6 +228,7 @@ static DC dc;
+ static XWindow xw;
+ static XSelection xsel;
+ static TermWindow win;
++struct timespec lastbell;
+ 
+ /* Font Ring Cache */
+ enum {
+@@ -825,18 +830,33 @@ xloadcols(void)
+ {
+ 	int i;
+ 	static int loaded;
+-	Color *cp;
+ 
+ 	if (loaded) {
+-		for (cp = dc.col; cp < &dc.col[dc.collen]; ++cp)
+-			XftColorFree(xw.dpy, xw.vis, xw.cmap, cp);
++		for (i = 0; i < dc.collen; i++) {
++			XftColorFree(xw.dpy, xw.vis, xw.cmap, &dc.normalcol[i]);
++			XftColorFree(xw.dpy, xw.vis, xw.cmap, &dc.bellcol[i]);
++		}
+ 	} else {
+ 		dc.collen = MAX(LEN(colorname), 256);
+-		dc.col = xmalloc(dc.collen * sizeof(Color));
++		dc.normalcol = xmalloc(dc.collen * sizeof(Color));
++		dc.bellcol   = xmalloc(dc.collen * sizeof(Color));
++		dc.col = dc.normalcol;
+ 	}
+ 
++	xnormalcols();
++	xbellcols();
++
++	loaded = 1;
++}
++
++void
++xnormalcols(void)
++{
++	int i;
++	static int loaded;
++
+ 	for (i = 0; i < dc.collen; i++)
+-		if (!xloadcolor(i, NULL, &dc.col[i])) {
++		if (!xloadcolor(i, NULL, &dc.normalcol[i])) {
+ 			if (colorname[i])
+ 				die("could not allocate color '%s'\n", colorname[i]);
+ 			else
+@@ -845,6 +865,22 @@ xloadcols(void)
+ 	loaded = 1;
+ }
+ 
++void
++xbellcols(void)
++{
++	int i;
++	XRenderColor bc;
++
++	for (i = 0; i < dc.collen; i++) {
++		bc.red   = MAX(0, MIN(0xffff, BELLR(dc.normalcol[i].color)));
++		bc.green = MAX(0, MIN(0xffff, BELLG(dc.normalcol[i].color)));
++		bc.blue  = MAX(0, MIN(0xffff, BELLB(dc.normalcol[i].color)));
++		bc.alpha = MAX(0, MIN(0xffff, BELLA(dc.normalcol[i].color)));
++		XftColorAllocValue(xw.dpy, xw.vis,
++				xw.cmap, &bc, &dc.bellcol[i]);
++	}
++}
++
+ int
+ xgetcolor(int x, unsigned char *r, unsigned char *g, unsigned char *b)
+ {
+@@ -1836,6 +1872,10 @@ xbell(void)
+ 		xseturgency(1);
+ 	if (bellvolume)
+ 		XkbBell(xw.dpy, xw.win, bellvolume, (Atom)NULL);
++
++	clock_gettime(CLOCK_MONOTONIC, &lastbell);
++	dc.col = dc.bellcol;
++	redraw();
+ }
+ 
+ void
+@@ -2001,7 +2041,7 @@ run(void)
+ 	fd_set rfd;
+ 	int xfd = XConnectionNumber(xw.dpy), ttyfd, xev, drawing;
+ 	struct timespec seltv, *tv, now, lastblink, trigger;
+-	double timeout;
++	double timeout, bellremain;
+ 
+ 	/* Waiting for window mapping */
+ 	do {
+@@ -2094,6 +2134,17 @@ run(void)
+ 			}
+ 		}
+ 
++		/* bell */
++		if (dc.col == dc.bellcol) {
++			bellremain = bellduration - TIMEDIFF(now, lastbell);
++			if (bellremain < 0) {
++				dc.col = dc.normalcol;
++				redraw();
++			} else if (timeout < 0 || bellremain < timeout) {
++				timeout = bellremain;
++			}
++		}
++
+ 		draw();
+ 		XFlush(xw.dpy);
+ 		drawing = 0;

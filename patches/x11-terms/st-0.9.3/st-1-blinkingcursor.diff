@@ -1,0 +1,78 @@
+diff --git a/x.c b/x.c
+index d73152b..dabcb8c 100644
+--- a/x.c
++++ b/x.c
+@@ -253,6 +253,7 @@ static char *opt_name  = NULL;
+ static char *opt_title = NULL;
+ 
+ static uint buttons; /* bit field of pressed buttons */
++static int cursorblinks = 0;
+ 
+ void
+ clipcopy(const Arg *dummy)
+@@ -1562,14 +1563,23 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
+ 	if (IS_SET(MODE_FOCUSED)) {
+ 		switch (win.cursor) {
+ 		case 7: /* st extension */
++			if (IS_SET(MODE_BLINK))
++				break;
++		case 8:
+ 			g.u = 0x2603; /* snowman (U+2603) */
+ 			/* FALLTHROUGH */
+ 		case 0: /* Blinking Block */
+ 		case 1: /* Blinking Block (Default) */
++			if (IS_SET(MODE_BLINK))
++				break;
++			/* FALLTHROUGH */
+ 		case 2: /* Steady Block */
+ 			xdrawglyph(g, cx, cy);
+ 			break;
+ 		case 3: /* Blinking Underline */
++			if (IS_SET(MODE_BLINK))
++				break;
++			/* FALLTHROUGH */
+ 		case 4: /* Steady Underline */
+ 			XftDrawRect(xw.draw, &drawcol,
+ 					borderpx + cx * win.cw,
+@@ -1578,6 +1588,9 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
+ 					win.cw, cursorthickness);
+ 			break;
+ 		case 5: /* Blinking bar */
++			if (IS_SET(MODE_BLINK))
++				break;
++			/* FALLTHROUGH */
+ 		case 6: /* Steady bar */
+ 			XftDrawRect(xw.draw, &drawcol,
+ 					borderpx + cx * win.cw,
+@@ -1746,9 +1759,10 @@ xsetmode(int set, unsigned int flags)
+ int
+ xsetcursor(int cursor)
+ {
+-	if (!BETWEEN(cursor, 0, 7)) /* 7: st extension */
++	if (!BETWEEN(cursor, 0, 8)) /* 7-8: st extensions */
+ 		return 1;
+ 	win.cursor = cursor;
++	cursorblinks = (win.cursor<2) || (win.cursor&1);
+ 	return 0;
+ }
+ 
+@@ -1995,6 +2009,10 @@ run(void)
+ 		if (FD_ISSET(ttyfd, &rfd) || xev) {
+ 			if (!drawing) {
+ 				trigger = now;
++				if (IS_SET(MODE_BLINK)) {
++					win.mode ^= MODE_BLINK;
++				}
++				lastblink = now;
+ 				drawing = 1;
+ 			}
+ 			timeout = (maxlatency - TIMEDIFF(now, trigger)) \
+@@ -2005,7 +2023,7 @@ run(void)
+ 
+ 		/* idle detected or maxlatency exhausted -> draw */
+ 		timeout = -1;
+-		if (blinktimeout && tattrset(ATTR_BLINK)) {
++		if (blinktimeout && (cursorblinks || tattrset(ATTR_BLINK))) {
+ 			timeout = blinktimeout - TIMEDIFF(now, lastblink);
+ 			if (timeout <= 0) {
+ 				if (-timeout > blinktimeout) /* start visible */

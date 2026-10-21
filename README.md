@@ -39,3 +39,14 @@ The issue is seen on llvm systems where clang fails to configure for pthreads.
 Warn as error is set and the configure generates an unused parameter warning.
 
 Another comment notes "generally all" m4 scripts are outdated.
+
+---
+# Special
+
+## x11-terms/st-0.9.3
+
+- Patch group in patches directory
+- Saved configuration in savedconfig directory
+
+Patches are applied lexographically,
+configuration uses settings provided by some patches.

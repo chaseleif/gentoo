@@ -1,0 +1,62 @@
+diff --git a/st.c b/st.c
+index 58fb21b..2e58deb 100644
+--- a/st.c
++++ b/st.c
+@@ -154,6 +154,7 @@ typedef struct {
+ } STREscape;
+ 
+ static void execsh(char *, char **);
++static char *getcwd_by_pid(pid_t pid);
+ static void stty(char **);
+ static void sigchld(int);
+ static void ttywriteraw(const char *, size_t);
+@@ -1055,6 +1056,37 @@ tswapscreen(void)
+ 	tfulldirt();
+ }
+ 
++void
++newterm(const Arg* a)
++{
++	int res;
++	switch (fork()) {
++		case -1:
++			die("fork failed: %s\n", strerror(errno));
++			break;
++		case 0:
++			switch (fork()) {
++				case -1:
++					die("fork failed: %s\n", strerror(errno));
++					break;
++				case 0:
++					res = chdir(getcwd_by_pid(pid));
++					execlp("st", "./st", NULL);
++					break;
++				default:
++					exit(0);
++			}
++		default:
++			wait(NULL);
++	}
++}
++
++static char *getcwd_by_pid(pid_t pid) {
++	char buf[32];
++	snprintf(buf, sizeof(buf), "/proc/%d/cwd", pid);
++	return realpath(buf, NULL);
++}
++
+ void
+ tscrolldown(int orig, int n)
+ {
+diff --git a/st.h b/st.h
+index 850214c..b8180f8 100644
+--- a/st.h
++++ b/st.h
+@@ -81,6 +81,7 @@ void die(const char *, ...);
+ void redraw(void);
+ void draw(void);
+ 
++void newterm(const Arg *);
+ void fullscreen(const Arg *);
+ void printscreen(const Arg *);
+ void printsel(const Arg *);

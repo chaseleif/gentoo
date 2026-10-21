@@ -1,0 +1,46 @@
+diff --git a/st.c b/st.c
+index 8be97ac..18efdc3 100644
+--- a/st.c
++++ b/st.c
+@@ -1992,11 +1992,11 @@ strhandle(void)
+ 				fprintf(stderr, "erresc: invalid color j=%d, p=%s\n",
+ 				        j, p ? p : "(null)");
+ 			} else {
+-				/*
+-				 * TODO if defaultbg color is changed, borders
+-				 * are dirty
+-				 */
+ 				tfulldirt();
++				if (j == defaultbg) {
++					xclearwin();
++					draw();
++				}
+ 			}
+ 			return;
+ 		case 110: /* reset dynamic VT100 text foreground color */
+diff --git a/win.h b/win.h
+index 6de960d..34d8b8b 100644
+--- a/win.h
++++ b/win.h
+@@ -39,3 +39,4 @@ void xsetpointermotion(int);
+ void xsetsel(char *);
+ int xstartdraw(void);
+ void xximspot(int, int);
++void xclearwin(void);
+diff --git a/x.c b/x.c
+index 4d0265c..b2ab8d8 100644
+--- a/x.c
++++ b/x.c
+@@ -922,6 +922,12 @@ xclear(int x1, int y1, int x2, int y2)
+ 			x1, y1, x2-x1, y2-y1);
+ }
+ 
++void
++xclearwin(void)
++{
++	xclear(0, 0, win.w, win.h);
++}
++
+ void
+ xhints(void)
+ {
