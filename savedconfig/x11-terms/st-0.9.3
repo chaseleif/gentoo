@@ -171,8 +171,8 @@ static unsigned int cursorshape = 1;
  * Default columns and rows numbers
  */
 
-static unsigned int cols = 80;
-static unsigned int rows = 24;
+static unsigned int cols = 90;
+static unsigned int rows = 27;
 
 /*
  * Default colour and shape of the mouse cursor
@@ -201,9 +201,9 @@ static uint forcemousemod = ShiftMask;
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
+	{ ShiftMask,            Button4, kscroll,        {.i = 1} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
+	{ ShiftMask,            Button5, kscroll,        {.i = -1} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
 
@@ -283,7 +283,7 @@ static Key key[] = {
 	{ XK_KP_Up,         XK_ANY_MOD,     "\033OA",        0,   +1},
 	{ XK_KP_Down,       XK_ANY_MOD,     "\033Or",       +1,    0},
 	{ XK_KP_Down,       XK_ANY_MOD,     "\033[B",        0,   -1},
-	{ XK_KP_Down,       XK_ANY_MOD,     "\033OB",        0,   +1},
+	{ XK_KP_Down,       XK_ANY_MOD,     "\033[B",        0,   +1},
 	{ XK_KP_Left,       XK_ANY_MOD,     "\033Ot",       +1,    0},
 	{ XK_KP_Left,       XK_ANY_MOD,     "\033[D",        0,   -1},
 	{ XK_KP_Left,       XK_ANY_MOD,     "\033OD",        0,   +1},
@@ -390,7 +390,7 @@ static Key key[] = {
 	{ XK_End,           ControlMask,    "\033[1;5F",    +1,    0},
 	{ XK_End,           ShiftMask,      "\033[K",       -1,    0},
 	{ XK_End,           ShiftMask,      "\033[1;2F",    +1,    0},
-	{ XK_End,           XK_ANY_MOD,     "\033[4~",       0,    0},
+	{ XK_End,           XK_ANY_MOD,     "\033[F",        0,    0},
 	{ XK_Prior,         ControlMask,    "\033[5;5~",     0,    0},
 	{ XK_Prior,         ShiftMask,      "\033[5;2~",     0,    0},
 	{ XK_Prior,         XK_ANY_MOD,     "\033[5~",       0,    0},
