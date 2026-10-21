@@ -45,6 +45,8 @@ Another comment notes "generally all" m4 scripts are outdated.
 
 ## x11-terms/st-0.9.3
 
+Patches obtained from suckless site with varying amount of modification
+
 - Patch group in patches directory
 - Saved configuration in savedconfig directory
 
