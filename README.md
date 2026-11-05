@@ -52,3 +52,17 @@ Patches obtained from suckless site with varying amount of modification
 
 Patches are applied lexographically,
 configuration uses settings provided by some patches.
+
+## librewolf-gentoo
+
+Clone of librewolf ebuild repo to use Xlibre rather than Xorg for pgo
+
+- Appended revision to latest version, allows to update
+- Copy ebuild into `/var/db/repos`, emerge, then remove
+
+```
+cat <<EOF > /etc/portage/package.mask/librewolf
+www-client/librewolf-bin
+<=www-client/librewolf-159.0_p1
+EOF
+```
