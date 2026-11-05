@@ -57,12 +57,9 @@ configuration uses settings provided by some patches.
 
 Clone of librewolf ebuild repo to use Xlibre rather than Xorg for pgo
 
-- Appended revision to latest version, allows to update
-- Copy ebuild into `/var/db/repos`, emerge, then remove
+- The dependency for pgo just changes xorg to xlibre
+- No other changes
 
-```
-cat <<EOF > /etc/portage/package.mask/librewolf
-www-client/librewolf-bin
-<=www-client/librewolf-159.0_p1
-EOF
+```bash
+emerge --ask --verbose =www-client/librewolf-159.0_p1::chaseleif
 ```
