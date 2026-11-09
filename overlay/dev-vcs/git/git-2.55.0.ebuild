@@ -22,7 +22,12 @@ DOC_VER="${MY_PV}"
 DESCRIPTION="Stupid content tracker: distributed VCS designed for speed and efficiency"
 HOMEPAGE="https://git-blame.blogspot.com/"
 
+SRC_URI_SUFFIX="xz"
+SRC_URI_KORG="https://www.kernel.org/pub/software/scm/git"
+
 SRC_URI="https://github.com/Libre-WD-40/git/archive/refs/tags/v${PV}-wd40.tar.gz"
+SRC_URI+=" ${SRC_URI_KORG}/${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}"
+SRC_URI+=" doc? ( ${SRC_URI_KORG}/${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX} )"
 
 if [[ ${PV} != *_rc* ]] ; then
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~arm64-macos ~x64-macos ~x64-solaris"
@@ -136,6 +141,13 @@ src_unpack() {
 
 	mv "${S}-wd40" "${S}"
 	cd "${S}" || die
+	unpack ${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+
+	if use doc ; then
+		pushd "${S}"/Documentation &>/dev/null || die
+		unpack ${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+		popd &>/dev/null || die
+	fi
 }
 
 src_prepare() {
