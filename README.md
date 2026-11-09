@@ -1,5 +1,13 @@
 # Overlay
 
+## dev-vcs/git
+
+The Libre-WD-40 fork of git
+- dev-vcs/git will require rust beginning in Git 3.0
+- shadowed the name since there is no virtual package for git
+
+Modified the dev-vcs/git ebuild for the rust-free fork
+
 ## lxde-base/lxpanel
 
 lxpanel-0.10.1-r2 latest official includes gtk problems that have been fixed
