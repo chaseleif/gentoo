@@ -17,6 +17,13 @@ Version 0.11.1 includes all patches applied to 0.10.1 and more.
 
 Mostly copied the 0.10.1-r2 ebuild, modified for `SRC_URI` and `src_prepare`
 
+## www-client/librewolf
+
+Copy of librewolf ebuild repo to allow Xlibre with use X and pgo
+
+- The dependency for pgo just changes xorg to xorg _or_ xlibre
+- No other changes
+
 ## x11-misc/fracplanet
 
 Package was removed from Gentoo.
@@ -61,13 +68,3 @@ Patches obtained from suckless site with varying amount of modification
 Patches are applied lexographically,
 configuration uses settings provided by some patches.
 
-## librewolf-gentoo
-
-Clone of librewolf ebuild repo to use Xlibre rather than Xorg for pgo
-
-- The dependency for pgo just changes xorg to xlibre
-- No other changes
-
-```bash
-emerge --ask --verbose =www-client/librewolf-159.0_p1::chaseleif
-```

@@ -1,0 +1,12 @@
+diff '--color=auto' -dru firefox-154.0.1.orig/toolkit/components/remote/nsXRemoteServer.cpp firefox-154.0.1/toolkit/components/remote/nsXRemoteServer.cpp
+--- firefox-154.0.1.orig/toolkit/components/remote/nsXRemoteServer.cpp	2026-08-24 22:18:35.000000000 +0200
++++ firefox-154.0.1/toolkit/components/remote/nsXRemoteServer.cpp	2026-08-29 09:11:44.231047901 +0200
+@@ -110,7 +110,7 @@
+ 
+     // Failed to get property off the window or
+     // got a part only
+-    if (result != Success || bytes_after != 0) {
++    if (result != X11Success || bytes_after != 0) {
+       return false;
+     }
+ 
