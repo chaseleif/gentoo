@@ -1,3 +1,0 @@
-[submodule "librewolf-gentoo"]
-	path = librewolf-gentoo
-	url = ssh://git@codeberg.org/chaseleif/librewolf-gentoo.git
