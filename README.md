@@ -2,7 +2,7 @@
 
 ## dev-vcs/git
 
-The Libre-WD-40 fork of git
+The [Libre-WD-40 fork of git](https://github.com/Libre-WD-40/git)
 - dev-vcs/git will require rust beginning in Git 3.0
 - shadowed the name since there is no virtual package for git
 
@@ -11,7 +11,7 @@ Modified the dev-vcs/git ebuild for the rust-free fork
 ## lxde-base/lxpanel
 
 lxpanel-0.10.1-r2 latest official includes gtk problems that have been fixed
-- created 0.11.1-r1 for newer version
+- created ebuild for newer version 0.11.1
 
 Version 0.11.1 includes all patches applied to 0.10.1 and more.
 
@@ -19,9 +19,9 @@ Mostly copied the 0.10.1-r2 ebuild, modified for `SRC_URI` and `src_prepare`
 
 ## www-client/librewolf
 
-Copy of librewolf ebuild repo to allow Xlibre with use X and pgo
+Copy of [librewolf ebuild repo](https://codeberg.org/librewolf/gentoo)
 
-- The dependency for pgo just changes xorg to xorg _or_ xlibre
+- Modified the dependency for pgo from xorg to xorg _or_ xlibre
 - No other changes
 
 ## x11-misc/fracplanet
