@@ -55,6 +55,18 @@ Warn as error is set and the configure generates an unused parameter warning.
 
 Another comment notes "generally all" m4 scripts are outdated.
 
+## sys-apps/util-linux-2.42.3
+
+### static-issue.patch
+
+Makes the "check if /etc/issue changed" function to unconditionally return no.
+
+This "fixes" the recent bug where /etc/issue is printed multiple times.
+
+Including \t in /etc/issue, among other cases, makes it appear to have changed.
+
+If we just don't check it, we have a static issue file.
+
 ---
 # Special
 

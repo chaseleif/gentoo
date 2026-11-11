@@ -1,0 +1,12 @@
+diff --git a/term-utils/agetty.c b/term-utils/agetty.c
+index 85d799e..12d98f8 100644
+--- a/term-utils/agetty.c
++++ b/term-utils/agetty.c
+@@ -1823,6 +1823,7 @@ static int issuefile_read(
+ #ifdef AGETTY_RELOAD
+ static int issue_is_changed(struct issue *ie)
+ {
++	return 0;
+ 	if (ie->mem_old && ie->mem
+ 	    && strcmp(ie->mem_old, ie->mem) == 0) {
+ 		free(ie->mem_old);
