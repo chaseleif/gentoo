@@ -2,11 +2,20 @@
 
 ## dev-vcs/git
 
+Modified gentoo:: dev-vcs/git ebuild for rust-free git
+
+### v2.55.0
 The [Libre-WD-40 fork of git](https://github.com/Libre-WD-40/git)
 - dev-vcs/git will require rust beginning in Git 3.0
-- shadowed the name since there is no virtual package for git
 
-Modified the dev-vcs/git ebuild for the rust-free fork
+### Later versions
+Brought over [my own fork of git](https://github.com/chaseleif/git)
+- Kept tags for versions required for a test (v2.28.0,v2.29.0)
+- Next stable is v2.56.1
+
+With the number of new changes, using original git as upstream.
+
+Updated patches for 2.56.1 -- the curl patch was merged upstream.
 
 ## lxde-base/lxpanel
 
@@ -33,7 +42,7 @@ Package was removed from Gentoo.
 
 I started from the original source and updated the package to use QT6.
 
-See repo at https://github.com/chaseleif/fracplanet
+Uses [my fracplanet repo](https://github.com/chaseleif/fracplanet)
 
 ---
 # Patches
@@ -63,7 +72,7 @@ Makes the "check if /etc/issue changed" function to unconditionally return no.
 
 This "fixes" the recent bug where /etc/issue is printed multiple times.
 
-Including \t in /etc/issue, among other cases, makes it appear to have changed.
+Including \t in /etc/issue, among other cases(?), makes it appear to have changed.
 
 If we just don't check it, we have a static issue file.
 
@@ -78,5 +87,5 @@ Patches obtained from suckless site with varying amount of modification
 - Saved configuration in savedconfig directory
 
 Patches are applied lexographically,
-configuration uses settings provided by some patches.
+savedconfig configuration provides settings used by some patches.
 
