@@ -14,7 +14,7 @@ inherit optfeature plocale python-single-r1 systemd meson
 PLOCALES="bg ca de es fr is it ko pt_PT ru sv vi zh_CN"
 
 # https://github.com/Libre-WD-40/git/archive/refs/tags/v2.55.0-wd40.tar.gz
-# https://github.com/chaseleif/wd40-git/archive/refs/tags/v2.56.1.tar.gz
+# https://github.com/chaseleif/git/archive/refs/tags/v2.56.1.tar.gz
 MY_PV="${PV/_rc/.rc}"
 MY_P="${PN}-${MY_PV}"
 
@@ -26,7 +26,7 @@ HOMEPAGE="https://git-blame.blogspot.com/"
 SRC_URI_SUFFIX="xz"
 SRC_URI_KORG="https://www.kernel.org/pub/software/scm/git"
 
-SRC_URI="https://github.com/chaseleif/wd40-git/archive/refs/tags/v${PV}.tar.gz"
+SRC_URI="https://github.com/chaseleif/git/archive/refs/tags/v${PV}.tar.gz"
 SRC_URI+=" ${SRC_URI_KORG}/${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}"
 SRC_URI+=" doc? ( ${SRC_URI_KORG}/${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX} )"
 
@@ -140,7 +140,6 @@ pkg_setup() {
 src_unpack() {
 	unpack v${PV}.tar.gz
 
-	mv "wd40-git-${PV}" "${S}"
 	cd "${S}" || die
 	unpack ${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}
 
