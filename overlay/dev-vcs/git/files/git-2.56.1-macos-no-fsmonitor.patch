@@ -1,0 +1,48 @@
+diff --git a/meson.build b/meson.build
+index 0135f7bb92..e7795286a6 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1386,17 +1386,19 @@ endif
+ 
+ fsmonitor_backend = ''
+ fsmonitor_os = ''
+-if host_machine.system() == 'windows'
+-  fsmonitor_backend = 'win32'
+-  fsmonitor_os = 'win32'
+-elif host_machine.system() == 'linux' and threads.found() and compiler.has_header('linux/magic.h')
+-  fsmonitor_backend = 'linux'
+-  fsmonitor_os = 'unix'
+-  libgit_c_args += '-DHAVE_LINUX_MAGIC_H'
+-elif host_machine.system() == 'darwin'
+-  fsmonitor_backend = 'darwin'
+-  fsmonitor_os = 'unix'
+-  libgit_dependencies += dependency('CoreServices')
++if get_option('fsmonitor')
++  if host_machine.system() == 'windows'
++    fsmonitor_backend = 'win32'
++    fsmonitor_os = 'win32'
++  elif host_machine.system() == 'linux' and threads.found() and compiler.has_header('linux/magic.h')
++    fsmonitor_backend = 'linux'
++    fsmonitor_os = 'unix'
++    libgit_c_args += '-DHAVE_LINUX_MAGIC_H'
++  elif host_machine.system() == 'darwin'
++    fsmonitor_backend = 'darwin'
++    fsmonitor_os = 'unix'
++    libgit_dependencies += dependency('CoreServices')
++  endif
+ endif
+ if fsmonitor_backend != ''
+   libgit_c_args += '-DHAVE_FSMONITOR_DAEMON_BACKEND'
+diff --git a/meson_options.txt b/meson_options.txt
+index 7dd01d7559..416adf9ed2 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -83,6 +83,8 @@ option('breaking_changes', type: 'boolean', value: false,
+   description: 'Enable upcoming breaking changes.')
+ option('macos_use_homebrew_gettext', type: 'boolean', value: true,
+   description: 'Use gettext from Homebrew instead of the slightly-broken system-provided one.')
++option('fsmonitor', type: 'boolean', value: true,
++  description: 'Build fsmonitor backend on supported platforms.')
+ 
+ # gitweb configuration.
+ option('gitweb_config', type: 'string', value: 'gitweb_config.perl')
