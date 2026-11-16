@@ -8,7 +8,7 @@ GENTOO_DEPEND_ON_PERL=no
 # bug #329479: git-remote-testgit is not multiple-version aware
 PYTHON_COMPAT=( python3_{12..14} )
 CARGO_OPTIONAL=1
-inherit cargo flag-o-matic toolchain-funcs perl-module shell-completion
+inherit flag-o-matic toolchain-funcs perl-module shell-completion
 inherit optfeature plocale python-single-r1 systemd meson
 
 PLOCALES="bg ca de es fr is it ko pt_PT ru sv vi zh_CN"
